@@ -37,6 +37,10 @@ ENV PERL5LIB ${FREESURFER_HOME}/mni/share/perl5
 ENV FS_OVERRIDE 0
 ENV LESSOPEN "||/usr/bin/lesspipe.sh %s"
 ENV FS_V8_XOPTS 0
+ENV PATH /usr/local/freesurfer/8.0.0-1/mni/bin${PATH}
+ENV PATH /usr/local/freesurfer/8.0.0-1/tktools:${PATH}
+ENV PATH /usr/local/freesurfer/8.0.0-1/fsfast/bin:${PATH}
+ENV PATH /usr/local/freesurfer/8.0.0-1/bin:${PATH}
 
 # And add our own code for custom post-processing and QC
 COPY README.md /opt/fs-extensions/
