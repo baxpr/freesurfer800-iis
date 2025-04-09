@@ -30,7 +30,7 @@ ENV FREESURFER_HOME_FSPYTHON ${FREESURFER_FSPYTHON}
 ENV SUBJECTS_DIR ${FREESURFER_HOME}/subjects
 ENV MINC_BIN_DIR ${FREESURFER_HOME}/mni/bin
 ENV MINC_LIB_DIR ${FREESURFER_HOME}/mni/lib
-RUN source ${FREESURFER_HOME}/SetUpFreeSurfer.sh
+ENV FS_V8_XOPTS 0
 
 # And add our own code for custom post-processing and QC
 COPY README.md /opt/fs-extensions/
