@@ -17,15 +17,20 @@ RUN cd /opt && \
     yum -y install /opt/freesurfer-Rocky8-8.0.0-1.x86_64.rpm && \
     rm freesurfer-Rocky8-8.0.0-1.x86_64.rpm
 
-# Freesurfer setup
-ENV FREESURFER_HOME /usr/local/freesurfer/8.0.0-1
-ENV SUBJECTS_DIR ${FREESURFER_HOME}/subjects
-RUN source ${FREESURFER_HOME}/SetUpFreeSurfer.sh
-
 # Patch for csvprint
 # https://ftp.nmr.mgh.harvard.edu/pub/dist/lcnpublic/dist/csvprint_8.0.0_patch/README.md
-RUN echo ${FREESURFER_HOME}
 COPY csvprint ${FREESURFER_HOME}/bin/csvprint
+
+# Freesurfer setup
+ENV FREESURFER_HOME /usr/local/freesurfer/8.0.0-1
+ENV PATH ${FREESURFER_HOME}/bin:${PATH}
+ENV FREESURFER_FSPYTHON ${FREESURFER_HOME}/bin/fspython
+ENV PATH ${FREESURFER_FSPYTHON}/bin:${PATH}
+ENV FREESURFER_HOME_FSPYTHON ${FREESURFER_FSPYTHON}
+ENV SUBJECTS_DIR ${FREESURFER_HOME}/subjects
+ENV MINC_BIN_DIR ${FREESURFER_HOME}/mni/bin
+ENV MINC_LIB_DIR ${FREESURFER_HOME}/mni/lib
+RUN source ${FREESURFER_HOME}/SetUpFreeSurfer.sh
 
 # And add our own code for custom post-processing and QC
 COPY README.md /opt/fs-extensions/
@@ -33,7 +38,7 @@ COPY README-csvprint.md /opt/fs-extensions/
 COPY src /opt/fs-extensions/src
 
 # System path needs the freesurfer python, plus our code
-ENV PATH /opt/fs-extensions/src:${FREESURFER_HOME}/python/bin:${PATH}
+ENV PATH /opt/fs-extensions/src:${PATH}
 
 # Entrypoint
 ENTRYPOINT ["run-everything.sh"]
