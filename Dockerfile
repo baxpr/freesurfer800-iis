@@ -20,6 +20,9 @@ RUN cd /opt && \
 ENV FREESURFER_HOME /usr/local/freesurfer/8.0.0-1
 COPY csvprint ${FREESURFER_HOME}/bin/csvprint
 
+# Freesurfer needs uptime
+RUN yum -y install procps-ng
+
 # Freesurfer environment
 ENV FREESURFER ${FREESURFER_HOME}
 ENV FREESURFER_HOME_FSPYTHON ${FREESURFER_HOME}
