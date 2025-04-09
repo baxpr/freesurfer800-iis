@@ -36,8 +36,6 @@ RUN source ${FREESURFER_HOME}/SetUpFreeSurfer.sh
 COPY README.md /opt/fs-extensions/
 COPY README-csvprint.md /opt/fs-extensions/
 COPY src /opt/fs-extensions/src
-
-# System path needs the freesurfer python, plus our code
 ENV PATH /opt/fs-extensions/src:${PATH}
 
 # Entrypoint
