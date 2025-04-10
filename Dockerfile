@@ -1,15 +1,14 @@
 FROM rockylinux:8.9
 
-# We need a few additional packages for installations, xvfb, imagemagick
+# We need a few additional packages for installations, xvfb, imagemagick, freesurfer
+# procps-ng provides uptime
 RUN yum -y update && \
-    yum -y install wget zip unzip && \
+    yum -y install wget zip unzip which procps-ng python3 && \
     yum -y install epel-release && \
     yum -y install ImageMagick && \
     yum -y install xorg-x11-server-Xvfb xorg-x11-xauth && \
+    yum -y install procps-ng mesa-libGLU fontconfig libtiff mesa-dri-drivers && \
     yum clean all
-
-# Don't think we need these for FS anymore because we're going via RPM?
-#  mesa-libGLU fontconfig libtiff mesa-dri-drivers
 
 # FS RPM package and patch for csvprint
 # https://ftp.nmr.mgh.harvard.edu/pub/dist/lcnpublic/dist/csvprint_8.0.0_patch/README.md
@@ -19,9 +18,6 @@ RUN cd /opt && \
     rm freesurfer-Rocky8-8.0.0-1.x86_64.rpm
 ENV FREESURFER_HOME /usr/local/freesurfer/8.0.0-1
 COPY csvprint ${FREESURFER_HOME}/bin/csvprint
-
-# Freesurfer needs uptime
-RUN yum -y install procps-ng
 
 # Freesurfer environment
 ENV FREESURFER ${FREESURFER_HOME}
@@ -44,6 +40,9 @@ ENV PATH /usr/local/freesurfer/8.0.0-1/mni/bin${PATH}
 ENV PATH /usr/local/freesurfer/8.0.0-1/tktools:${PATH}
 ENV PATH /usr/local/freesurfer/8.0.0-1/fsfast/bin:${PATH}
 ENV PATH /usr/local/freesurfer/8.0.0-1/bin:${PATH}
+
+# Add modules to system python
+RUN pip3 install pandas nibabel numpy scipy
 
 # And add our own code for custom post-processing and QC
 COPY README.md /opt/fs-extensions/
