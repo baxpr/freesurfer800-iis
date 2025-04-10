@@ -41,3 +41,7 @@ nii_convert.sh
 # Make screenshots and PDFs
 xwrapper.sh make_pdf.sh
 
+# Clean up SUBJECT dir
+rm -fr "${SUBJECTS_DIR}"/SUBJECT/trash
+rm -fr "${SUBJECTS_DIR}"/SUBJECT/tmp
+
