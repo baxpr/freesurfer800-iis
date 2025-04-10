@@ -45,8 +45,8 @@ ENV PATH /usr/local/freesurfer/8.0.0-1/bin:${PATH}
 RUN cd /opt && \
     wget https://github.com/freesurfer/freesurfer/archive/refs/tags/v8.0.0.zip && \
     unzip v8.0.0.zip && \
-    mv freesurfer-8.0.0/mri_histo_util/ERC_bayesian_segmentation/ERC_bayesian_segmentation/* \
-        ${FREESURFER_HOME}/python/packages/ERC_bayesian_segmentation && \
+    mv freesurfer-8.0.0/mri_histo_util/ERC_bayesian_segmentation/ERC_bayesian_segmentation \
+        ${FREESURFER_HOME}/python/packages && \
     rm -r v8.0.0.zip freesurfer-8.0.0
 
 # Atlases for NextBrain
