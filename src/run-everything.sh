@@ -37,6 +37,9 @@ segment_subregions hippo-amygdala --cross SUBJECT
 segment_subregions brainstem --cross SUBJECT
 mri_sclimbic_seg -s SUBJECT --conform --write_qa_stats
 
+# NextBrain
+mri_histo_atlas_segment_fireants /INPUTS/t1.nii.gz "${out_dir}"/NextBrain 0 -1 dct
+
 # Post processing
 postproc-entrypoint.sh \
     --subjects_dir "${SUBJECTS_DIR}" \

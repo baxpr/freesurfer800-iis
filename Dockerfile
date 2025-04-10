@@ -19,6 +19,12 @@ RUN cd /opt && \
 ENV FREESURFER_HOME /usr/local/freesurfer/8.0.0-1
 COPY csvprint ${FREESURFER_HOME}/bin/csvprint
 
+# Atlases for NextBrain
+RUN cd /opt && \
+    wget https://ftp.nmr.mgh.harvard.edu/pub/dist/lcnpublic/dist/Histo_Atlas_Iglesias_2023/atlas_simplified.zip && \
+    unzip atlas_simplified.zip -d "${FREESURFER_HOME}"/python/packages/ERC_bayesian_segmentation && \
+    rm atlas_simplified.zip
+
 # Freesurfer environment
 ENV FREESURFER ${FREESURFER_HOME}
 ENV FREESURFER_HOME_FSPYTHON ${FREESURFER_HOME}
