@@ -19,12 +19,6 @@ RUN cd /opt && \
 ENV FREESURFER_HOME /usr/local/freesurfer/8.0.0-1
 COPY csvprint ${FREESURFER_HOME}/bin/csvprint
 
-# Atlases for NextBrain
-RUN cd /opt && \
-    wget https://ftp.nmr.mgh.harvard.edu/pub/dist/lcnpublic/dist/Histo_Atlas_Iglesias_2023/atlas_simplified.zip && \
-    unzip atlas_simplified.zip -d "${FREESURFER_HOME}"/python/packages/ERC_bayesian_segmentation && \
-    rm atlas_simplified.zip
-
 # Freesurfer environment
 ENV FREESURFER ${FREESURFER_HOME}
 ENV FREESURFER_HOME_FSPYTHON ${FREESURFER_HOME}
@@ -46,6 +40,20 @@ ENV PATH /usr/local/freesurfer/8.0.0-1/mni/bin${PATH}
 ENV PATH /usr/local/freesurfer/8.0.0-1/tktools:${PATH}
 ENV PATH /usr/local/freesurfer/8.0.0-1/fsfast/bin:${PATH}
 ENV PATH /usr/local/freesurfer/8.0.0-1/bin:${PATH}
+
+# Scripts etc for NextBrain
+RUN cd /opt && \
+    wget https://github.com/freesurfer/freesurfer/archive/refs/tags/v8.0.0.zip && \
+    unzip v8.0.0.zip && \
+    mv freesurfer-8.0.0/mri_histo_util/ERC_bayesian_segmentation/ERC_bayesian_segmentation/* \
+        ${FREESURFER_HOME}/python/packages/ERC_bayesian_segmentation && \
+    rm -r v8.0.0.zip freesurfer-8.0.0
+
+# Atlases for NextBrain
+RUN cd /opt && \
+    wget https://ftp.nmr.mgh.harvard.edu/pub/dist/lcnpublic/dist/Histo_Atlas_Iglesias_2023/atlas_simplified.zip && \
+    unzip atlas_simplified.zip -d "${FREESURFER_HOME}"/python/packages/ERC_bayesian_segmentation && \
+    rm atlas_simplified.zip
 
 # Add modules to system python
 RUN pip3 install pandas nibabel numpy scipy
