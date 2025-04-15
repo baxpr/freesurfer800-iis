@@ -16,7 +16,7 @@ inputs:
     
     scans:
       - name: scan_t1
-        types: 3D_T1
+        types: cs_T1W_3D_TFE_32 channel
         skip_unusable: True
         needs_qc: False
         resources:
