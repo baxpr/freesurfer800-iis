@@ -5,6 +5,10 @@ export t1_niigz=/INPUTS/t1.nii.gz
 export SUBJECTS_DIR=/OUTPUTS
 export out_dir=/OUTPUTS
 export label_info="Unlabeled scan"
+export nextbrain_gpu=0
+export nextbrain_threads=1
+export nextbrain_basis=dct
+
 
 # Parse inputs
 while [[ $# -gt 0 ]]
@@ -19,6 +23,12 @@ do
         export label_info="$2"; shift; shift;;
     --out_dir)
         export out_dir="$2"; shift; shift;;
+    --nextbrain_gpu)
+        export nextbrain_gpu="$2"; shift; shift;;
+    --nextbrain_threads)
+        export nextbrain_threads="$2"; shift; shift;;
+    --nextbrain_basis)
+        export nextbrain_basis="$2"; shift; shift;;
     *)
 		echo "Unknown argument $key"; shift;;
   esac
@@ -38,7 +48,8 @@ segment_subregions brainstem --cross SUBJECT
 mri_sclimbic_seg -s SUBJECT --conform --write_qa_stats
 
 # NextBrain
-mri_histo_atlas_segment_fireants /INPUTS/t1.nii.gz "${out_dir}"/NextBrain 0 -1 dct
+mri_histo_atlas_segment_fireants /INPUTS/t1.nii.gz "${out_dir}"/NextBrain \
+    ${nextbrain_gpu} ${nextbrain_threads} ${nextbrain_basis}
 
 # Post processing
 postproc-entrypoint.sh \
