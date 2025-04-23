@@ -45,10 +45,10 @@ outputs:
   - {path: NextBrain, type: DIR, resource: NextBrain}
 
 
-command: 
+command:
   type: singularity_run
   container: freesurfer
-  extraopts: --bind /data/mcr/centos7/FS6/license.txt:/usr/local/freesurfer/.license
+  extraopts: --bind /data/mcr/centos7/FS6/license.txt:/usr/local/freesurfer/8.0.0-1/.license
   args: >-
     --t1_niigz /INPUTS/t1.nii.gz
     --subjects_dir /OUTPUTS
