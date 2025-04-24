@@ -48,6 +48,11 @@ outputs:
 command:
   type: singularity_run
   container: freesurfer
+  opts: >-
+    --home $JOBDIR
+    --bind $INDIR:/INPUTS
+    --bind $OUTDIR:/OUTPUTS
+    --bind $JOBDIR:/tmp
   extraopts: --bind /data/mcr/centos7/FS6/license.txt:/usr/local/freesurfer/8.0.0-1/.license
   args: >-
     --t1_niigz /INPUTS/t1.nii.gz
