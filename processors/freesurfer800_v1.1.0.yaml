@@ -42,7 +42,9 @@ outputs:
   - {path: VOLSTATS_std, type: DIR, resource: VOLSTATS_std}
   - {path: VOLSTATS_highres, type: DIR, resource: VOLSTATS_highres}
   - {path: SCLIMBIC_QA, type: DIR, resource: SCLIMBIC_QA}
-  - {path: NextBrain, type: DIR, resource: NextBrain}
+
+# NextBrain skipped due to memory demands
+#  - {path: NextBrain, type: DIR, resource: NextBrain}
 
 
 command:
