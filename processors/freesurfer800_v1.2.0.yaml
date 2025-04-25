@@ -4,8 +4,8 @@ procyamlversion: 3.0.0-dev.0
 
 containers:
   - name: freesurfer
-    path: freesurfer800-iis_v1.1.0.sif
-    source: docker://baxterprogers/freesurfer800-iis:v1.1.0
+    path: freesurfer800-iis_v1.2.0.sif
+    source: docker://baxterprogers/freesurfer800-iis:v1.2.0
 requirements:
   walltime: 5-0
   memory: 32G
