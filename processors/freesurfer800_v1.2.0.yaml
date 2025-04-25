@@ -7,7 +7,7 @@ containers:
     path: freesurfer800-iis_v1.2.0.sif
     source: docker://baxterprogers/freesurfer800-iis:v1.2.0
 requirements:
-  walltime: 5-0
+  walltime: 2-0
   memory: 32G
 jobtemplate: job_template_v3.txt
 
