@@ -1,0 +1,89 @@
+# https://github.com/baxpr/spm-plus
+# https://github.com/baxpr/fs-lean
+# https://github.com/baxpr/fsqa
+---
+procyamlversion: 3.0.0-dev.0
+containers:
+  - name: spm
+    path: spm-plus_v1.0.1.sif
+    source: docker://baxterprogers/spm-plus:v1.0.1
+  - name: fs
+    path: freesurfer800-iis_v1.2.0.sif
+    source: docker://baxterprogers/freesurfer800-iis:v1.2.0
+requirements:
+  walltime: 2-0
+  memory: 32G
+jobtemplate: job_template_v3.txt
+
+inputs:
+  xnat:
+    assessors:
+      - name: assr_prept1
+        types: prept1_v1
+        resources: 
+          - {resource: MEAN_T1_RAW, fdest: t1.nii.gz}
+
+    attrs:
+      - {varname: project, object: assessor, attr: project}
+      - {varname: subject, object: session, attr: subject_label}
+      - {varname: session, object: session, attr: label}
+
+outputs:
+  - {path: PDF/Freesurfer-QA.pdf, type: FILE, resource: PDF}
+  - {path: PDF_DETAIL, type: DIR, resource: PDF_DETAIL}
+  - {path: SUBJECT, type: DIR, resource: SUBJECT}
+  - {path: NIFTIS, type: DIR, resource: NIFTIS}
+  - {path: MMhippomaps, type: DIR, resource: MMhippomaps}
+  - {path: APARCSTATS_BA_exvivo, type: DIR, resource: APARCSTATS_BA_exvivo}
+  - {path: APARCSTATS_DKTatlas, type: DIR, resource: APARCSTATS_DKTatlas}
+  - {path: APARCSTATS_a2009s, type: DIR, resource: APARCSTATS_a2009s}
+  - {path: APARCSTATS_aparc, type: DIR, resource: APARCSTATS_aparc}
+  - {path: APARCSTATS_pial, type: DIR, resource: APARCSTATS_pial}
+  - {path: VOLSTATS_std, type: DIR, resource: VOLSTATS_std}
+  - {path: VOLSTATS_highres, type: DIR, resource: VOLSTATS_highres}
+  - {path: SCLIMBIC_QA, type: DIR, resource: SCLIMBIC_QA}
+
+pre:
+  type: singularity_exec
+  container: spm
+  args: >-
+    bash -c \"
+    cp /INPUTS/t1.nii.gz /OUTPUTS/t1.nii.gz && 
+    gunzip /OUTPUTS/t1.nii.gz && 
+    /opt/spm12/spm12 batch /opt/matlabbatch/matlabbatch_segment_30fwhm.mat &&
+    gzip /OUTPUTS/*.nii
+    \"
+    
+command: 
+  type: singularity_exec
+  container: fs
+  extraopts: >-
+    --bind /data/mcr/centos7/FS6/license.txt:/usr/local/freesurfer/.license
+  args: >-
+    bash -c \"
+    
+    export SUBJECTS_DIR=/OUTPUTS && 
+    cd /OUTPUTS &&
+
+    recon-all -subjid SUBJECT -autorecon1 -hires -i mt1.nii.gz && 
+    
+    mri_concat --i c1t1.nii.gz --i c2t1.nii.gz --i c3t1.nii.gz --sum --o summed.mgz &&
+    mri_binarize --i summed.mgz --min 0.01 --dilate 5 --erode 5 --o dsummed.mgz &&
+    mri_mask /OUTPUTS/SUBJECT/mri/T1.mgz dsummed.mgz /OUTPUTS/SUBJECT/mri/brainmask.mgz &&
+    
+    recon-all -subjid SUBJECT -autorecon2 -hires && 
+
+    recon-all -subjid SUBJECT -autorecon3 -hires && 
+    
+    segment_subregions thalamus --cross SUBJECT &&
+    segment_subregions hippo-amygdala --cross SUBJECT &&
+    segment_subregions brainstem --cross SUBJECT &&
+    mri_sclimbic_seg -s SUBJECT --conform --write_qa_stats &&
+    
+    postproc-entrypoint.sh
+        --subjects_dir /OUTPUTS
+        --label_info {project}-x-{subject}-x-{session}
+        --out_dir /OUTPUTS
+    
+    \"
+
