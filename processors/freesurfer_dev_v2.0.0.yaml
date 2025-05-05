@@ -1,0 +1,47 @@
+---
+# https://github.com/baxpr/freesurfer-singularity
+procyamlversion: 3.0.0-dev.0
+containers: 
+  - name: FREESURFER_DEV
+    path: baxpr-freesurfer-singularity-master-dev2.simg
+    source: shub://baxpr/freesurfer-singularity:dev2
+requirements: 
+  walltime: "48:00:00"
+  memory: 16G
+inputs:
+  xnat:
+    scans:
+      - name: scan_t1
+        types: 'T1W/3D/TFE'
+        needs_qc: False
+        resources:
+          - {resource: NIFTI, ftype: FILE, fdest: T1.nii.gz, varname: t1_file}
+    attrs:
+      - {varname: project, object: assessor, attr: project}
+      - {varname: subject, object: session, attr: subject_label}
+      - {varname: session, object: session, attr: label}
+      - {varname: scan, object: scan, attr: ID, ref: scan_t1}
+outputs:
+  - {path: PDF/freesurfer_v2.pdf, type: FILE, resource: PDF}
+  - {path: PDF_DETAIL, type: DIR, resource: PDF_DETAIL}
+  - {path: SUBJECT, type: DIR, resource: SUBJECT}
+  - {path: STATS, type: DIR, resource: STATS}
+  - {path: STATS_ABBREV, type: DIR, resource: STATS_ABBREV}
+  - {path: NII_T1, type: DIR, resource: NII_T1}
+  - {path: NII_ASEG, type: DIR, resource: NII_ASEG}
+  - {path: NII_WMPARC, type: DIR, resource: NII_WMPARC}
+  - {path: NII_THALAMUS, type: DIR, resource: NII_THALAMUS}
+  - {path: NII_BRAINSTEM, type: DIR, resource: NII_BRAINSTEM}
+  - {path: NII_HIPP_AMYG, type: DIR, resource: NII_HIPP_AMYG}
+command: 
+  type: singularity_run
+  container: FREESURFER_DEV
+  extraopts: --bind /data/mcr/centos7/FS6/license.txt:/usr/local/freesurfer/license.txt
+  args: >-
+    --t1_nii /INPUTS/{t1_file}
+    --project {project}
+    --subject {subject}
+    --session {session}
+    --scan {scan}
+    --outdir /OUTPUTS
+jobtemplate: job_template_v3.txt
