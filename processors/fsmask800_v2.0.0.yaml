@@ -8,8 +8,8 @@ containers:
     path: spm-plus_v1.0.1.sif
     source: docker://baxterprogers/spm-plus:v1.0.1
   - name: fs
-    path: freesurfer800-iis_v1.2.0.sif
-    source: docker://baxterprogers/freesurfer800-iis:v1.2.0
+    path: freesurfer800-iis_v2.0.0.sif
+    source: docker://baxterprogers/freesurfer800-iis:v2.0.0
 requirements:
   walltime: 2-0
   memory: 32G
