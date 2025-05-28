@@ -45,10 +45,7 @@ outputs:
 
 # NextBrain skipped due to memory demands
 #  - {path: NextBrain, type: DIR, resource: NextBrain}
-#
-# Note use of 
-#    --env FS_V8_XOPTS=1
-# To use Freesurfer 8 synth modules for skull strip etc
+
 command:
   type: singularity_run
   container: freesurfer
@@ -59,7 +56,6 @@ command:
     --bind $JOBDIR:/tmp
   extraopts: >-
     --bind /data/mcr/centos7/FS6/license.txt:/usr/local/freesurfer/8.0.0-1/.license
-    --env FS_V8_XOPTS=1
   args: >-
     --t1_niigz /INPUTS/t1.nii.gz
     --subjects_dir /OUTPUTS
