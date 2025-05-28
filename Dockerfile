@@ -20,7 +20,7 @@ ENV FREESURFER_HOME /usr/local/freesurfer/8.0.0-1
 
 # FS patches (https://surfer.nmr.mgh.harvard.edu/fswiki/rel7downloads/rel8updates)
 RUN cd /opt && \
-    wget -q https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/8.0.0/fs8_update.sh && \
+    wget -q https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/8.0.0/fs8_updates.sh && \
     bash fs8_updates.sh
 
 # Freesurfer environment
