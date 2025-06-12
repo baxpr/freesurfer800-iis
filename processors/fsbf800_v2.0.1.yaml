@@ -67,5 +67,5 @@ command:
   args: >-
     --t1_niigz /INPUTS/mt1.nii.gz
     --subjects_dir /OUTPUTS
-    --label_info "{project} {session} {scan}"
+    --label_info "{project} {subject} {session}"
     --out_dir /OUTPUTS
